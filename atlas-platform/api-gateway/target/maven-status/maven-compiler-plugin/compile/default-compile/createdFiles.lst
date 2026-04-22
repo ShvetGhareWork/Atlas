@@ -1,0 +1,3 @@
+com\atlas\ApiGatewayApplication.class
+com\atlas\filter\JwtAuthenticationFilter$Config.class
+com\atlas\filter\JwtAuthenticationFilter.class
