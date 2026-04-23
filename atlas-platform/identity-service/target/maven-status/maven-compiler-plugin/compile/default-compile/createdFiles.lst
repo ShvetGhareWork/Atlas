@@ -1,0 +1,10 @@
+com\atlas\model\User.class
+com\atlas\controller\AuthController.class
+com\atlas\dto\AuthRequest.class
+com\atlas\service\AuthConfig.class
+com\atlas\repo\UserRepository.class
+com\atlas\IdentityServiceApplication.class
+com\atlas\service\CustomUserDetailsService.class
+com\atlas\service\AuthService.class
+com\atlas\service\JwtService.class
+com\atlas\service\CustomUserDetails.class

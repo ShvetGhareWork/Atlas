@@ -1,0 +1,10 @@
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\dto\AuthRequest.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\service\AuthService.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\IdentityServiceApplication.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\service\CustomUserDetailsService.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\model\User.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\service\AuthConfig.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\controller\AuthController.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\service\CustomUserDetails.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\repo\UserRepository.java
+C:\Atlas\atlas-platform\identity-service\src\main\java\com\atlas\service\JwtService.java

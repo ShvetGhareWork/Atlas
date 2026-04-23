@@ -2,12 +2,21 @@ server:
   port: 8080
 
 spring:
-  application: api-gateway
+  application:
+    name: api-gateway
   
   cloud:
     gateway:
       routes:
-      # Route requests starting with /api/orders to order-service
+
+  # Route requests starting with /api/auth to identity-service
+        - id: identity-service
+          uri: lb://identity-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /${segment}
+
         - id: order-service
           uri: lb://order-service
           predicates:
@@ -25,11 +34,7 @@ spring:
           filters:
             - JwtAuthenticationFilter
 
-        # Route requests starting with /api/auth to identity-service
-        - id: identity-service
-          uri: lb://identity-service
-          predicates:
-            - Path=/api/auth/**
+      
 
 # Eureka server configuration
 eureka:
