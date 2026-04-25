@@ -8,8 +8,6 @@ spring:
   cloud:
     gateway:
       routes:
-
-  # Route requests starting with /api/auth to identity-service
         - id: identity-service
           uri: lb://identity-service
           predicates:
@@ -23,21 +21,18 @@ spring:
             - Path=/api/orders/**
           filters:
             - JwtAuthenticationFilter
-            - RewritePath=/api/(?<segment>.*), /${segment} # Add a space or quotes if it fails
+            - RewritePath=/api/(?<segment>.*), /${segment}
 
-
-        # Route requests starting with /api/inventory to inventory-service
         - id: inventory-service
           uri: lb://inventory-service
           predicates:
             - Path=/api/inventory/**
           filters:
-            - JwtAuthenticationFilter
-
-      
+            # - JwtAuthenticationFilter
+            - RewritePath=/api/(?<segment>.*), /${segment}
 
 # Eureka server configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/ # Tells the gateway where the Eureka server is.
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}

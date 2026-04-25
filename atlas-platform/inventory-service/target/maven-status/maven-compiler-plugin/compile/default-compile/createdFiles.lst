@@ -1,0 +1,10 @@
+com\atlas\events\OrderCreatedEvent.class
+com\atlas\controller\InventoryController.class
+com\atlas\InventoryServiceApplication.class
+com\atlas\events\InventoryReservationFailedEvent.class
+com\atlas\events\InventoryReservedEvent.class
+com\atlas\service\InventoryService.class
+com\atlas\kafka\OrderEventConsumer.class
+com\atlas\model\InventoryModel.class
+com\atlas\kafka\InventoryEventProducer.class
+com\atlas\repository\InventoryRepository.class

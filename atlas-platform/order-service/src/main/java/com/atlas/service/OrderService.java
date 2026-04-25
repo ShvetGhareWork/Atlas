@@ -1,5 +1,6 @@
 package com.atlas.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,19 @@ public class OrderService {
         orderEventProducer.publishOrderCreatedEvent(event);
 
         return order;
+    }
+
+    public Optional<OrderModel> getOrderById(String orderId) {
+        return orderRepository.findById(orderId);
+    }
+
+    public void upateOrderStatus(String orderId, String status){
+        Optional<OrderModel> orderOptional = orderRepository.findById(orderId);
+        if(orderOptional.isPresent()){
+            OrderModel order = orderOptional.get();
+            order.setOrderStatus(status);
+            orderRepository.save(order);
+            log.info("Order status updated to {}: {}", status, orderId);
+        }
     }
 }

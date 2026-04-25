@@ -1,0 +1,10 @@
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\InventoryServiceApplication.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\service\InventoryService.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\repository\InventoryRepository.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\kafka\InventoryEventProducer.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\controller\InventoryController.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\events\InventoryReservationFailedEvent.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\kafka\OrderEventConsumer.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\events\InventoryReservedEvent.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\events\OrderCreatedEvent.java
+C:\Atlas\atlas-platform\inventory-service\src\main\java\com\atlas\model\InventoryModel.java

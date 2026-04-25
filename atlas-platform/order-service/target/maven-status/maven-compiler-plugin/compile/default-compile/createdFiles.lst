@@ -1,0 +1,4 @@
+com\atlas\model\OrderModel.class
+com\atlas\repository\OrderRepository.class
+com\atlas\service\OrderService.class
+com\atlas\kafka\OrderEventProducer.class

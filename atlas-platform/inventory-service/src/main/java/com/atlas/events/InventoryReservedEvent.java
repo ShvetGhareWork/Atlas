@@ -1,0 +1,52 @@
+package com.atlas.events;
+
+public class InventoryReservedEvent {
+    
+    private String orderId;
+    private String userId;
+    private String productId;
+    private int quantity;
+    private String status;
+
+    public InventoryReservedEvent(){}
+    public InventoryReservedEvent(String orderId,String userId,String productId,int quantity,String status){
+        this.orderId=orderId;
+        this.userId=userId;
+        this.productId=productId;
+        this.quantity=quantity;
+        this.status=status;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    public String getProductId() {
+        return productId;
+    }
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+}

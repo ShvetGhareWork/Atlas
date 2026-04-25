@@ -1,8 +1,11 @@
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\model\OrderModel.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\controller\OrderController.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\dto\OrderRequest.java
+C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\events\InventoryReservationFailedEvent.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\kafka\OrderEventProducer.java
+C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\kafka\InventoryEventConsumer.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\events\OrderCreatedEvent.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\repository\OrderRepository.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\service\OrderService.java
+C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\events\InventoryReservedEvent.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\OrderServiceApplication.java
