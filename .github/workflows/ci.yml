@@ -29,6 +29,7 @@ jobs:
     # Step 3: The actual build command (The Maven Reactor)
     # '-B' means 'Batch mode' (less messy logs in the terminal)
     - name: Build and Test with Maven
+      working-directory: atlas-platform
       run: mvn -B clean verify
 
     # Step 4: (Optional but highly recommended) Upload Test Results
