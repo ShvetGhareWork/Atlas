@@ -30,7 +30,7 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/register", "/auth/login", "/auth/test-token").permitAll() // Allow these!
+                    .requestMatchers("/auth/register", "/auth/login", "/auth/test-token", "/actuator/prometheus").permitAll() // Allow these!
                     .anyRequest().authenticated()
                 )
                 .build();
