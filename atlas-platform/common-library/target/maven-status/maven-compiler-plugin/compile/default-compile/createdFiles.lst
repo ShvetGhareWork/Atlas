@@ -1,0 +1,2 @@
+com\atlas\common\dto\ErrorResponse.class
+com\atlas\common\exception\GlobalExceptionHandler.class

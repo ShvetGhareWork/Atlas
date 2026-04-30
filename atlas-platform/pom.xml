@@ -15,5 +15,6 @@
         <module>inventory-service</module>
         <module>order-service</module>
         <module>ai-optimizer-service</module>
+        <module>common-library</module>
     </modules>
 </project>

@@ -1,13 +1,11 @@
 package com.atlas.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -16,10 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String orderId; // Business ID
     private String userId;
-    private String productId;
-    private int quantity;
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderLineItems> orderLineItemsList;
+    
     private String orderStatus;
 }

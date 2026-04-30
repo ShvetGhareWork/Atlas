@@ -22,7 +22,7 @@ public class InventoryEventConsumer {
     @KafkaListener(topics = "inventory-reserved", groupId = "order-service-group")
     public void handleInventoryReserved(InventoryReservedEvent event) {
         log.info("Inventory reserved for orderId={}", event.getOrderId());
-        orderRepository.findById(event.getOrderId()).ifPresent(order -> {
+        orderRepository.findByOrderId(event.getOrderId()).ifPresent(order -> {
             order.setOrderStatus("CONFIRMED");
             orderRepository.save(order);
             log.info("Order {} status updated to CONFIRMED", event.getOrderId());
@@ -35,7 +35,7 @@ public class InventoryEventConsumer {
     public void handleInventoryFailure(InventoryReservationFailedEvent event) {
         log.error("Received Inventory Failure for Order {}: {}", event.getOrderId(), event.getReason());
         
-        orderRepository.findById(event.getOrderId()).ifPresent(order -> {
+        orderRepository.findByOrderId(event.getOrderId()).ifPresent(order -> {
             order.setOrderStatus("FAILED");
             orderRepository.save(order);
             log.info("Order {} status updated to FAILED", event.getOrderId());

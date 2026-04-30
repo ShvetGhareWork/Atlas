@@ -13,12 +13,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.atlas.dto.OrderLineItemsDto;
 import com.atlas.dto.OrderRequest;
+import com.atlas.dto.OrderResponse;
 import com.atlas.events.OrderCreatedEvent;
 import com.atlas.kafka.OrderEventProducer;
+import com.atlas.model.OrderLineItems;
 import com.atlas.model.OrderModel;
 import com.atlas.repository.OrderRepository;
 import com.atlas.service.OrderService;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -35,18 +43,22 @@ public class OrderServiceTest {
     @Test
     void shouldPlaceOrderSuccessfully() {
         // Arrange
-        OrderRequest request = new OrderRequest("USER-1", "PROD-001", 2);
-        OrderModel savedOrder = new OrderModel("mock-order-id", "USER-1", "PROD-001", 2, "PENDING");
+        OrderLineItemsDto itemDto = new OrderLineItemsDto("PROD-1", "SKU-1", new BigDecimal("100.00"), 2);
+        OrderRequest request = new OrderRequest("USER-1", Collections.singletonList(itemDto));
+        
+        OrderLineItems item = new OrderLineItems(1L, "SKU-1", new BigDecimal("100.00"), 2);
+        OrderModel savedOrder = new OrderModel(1L, "mock-order-id", "USER-1", Collections.singletonList(item), "PENDING");
         
         when(orderRepository.save(any(OrderModel.class))).thenReturn(savedOrder);
 
         // Act
-        OrderModel result = orderService.placeOrder(request);
+        OrderResponse result = orderService.placeOrder(request);
 
         // Assert
         assertNotNull(result.getOrderId());
-        assertEquals("PROD-001", result.getProductId());
+        assertEquals("USER-1", result.getUserId());
         assertEquals("PENDING", result.getOrderStatus());
+        assertEquals(1, result.getOrderLineItemsList().size());
         
         verify(orderRepository, times(1)).save(any(OrderModel.class));
         verify(orderEventProducer, times(1)).publishOrderCreatedEvent(any(OrderCreatedEvent.class));
