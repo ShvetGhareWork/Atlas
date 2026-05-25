@@ -51,44 +51,44 @@
                           │        Spring Cloud Gateway           │
                           └──────────────────┬──────────────────┘
                                              │
-               ┌─────────────────────────────┼─────────────────────────────┐
-               │                             │                             │
-  ┌────────────▼──────────┐   ┌─────────────▼──────────┐   ┌─────────────▼──────────┐
-  │    Auth Service        │   │   Inventory Service      │   │    Order Service        │
-  │      (Port 8081)       │   │      (Port 8082)         │   │      (Port 8083)        │
-  │  JWT · Spring Security │   │  Stock · Warehousing     │   │  Orders · Fulfilment    │
-  └────────────┬───────────┘   └─────────────┬───────────┘   └──────────────┬──────────┘
-               │                             │                               │
-               │               ┌─────────────▼───────────────────────────────┘
-               │               │         Apache Kafka (Event Bus)
-               │               │   Topics: inventory.updated · order.created
-               │               │           order.fulfilled · stock.alert
-               │               └───────────────────────────────────┐
-               │                                                   │
-  ┌────────────▼──────────┐                         ┌─────────────▼──────────┐
-  │   PostgreSQL (Auth)    │                         │    PostgreSQL (Orders)   │
-  │   Redis (Token Cache)  │                         │    Redis (Stock Cache)   │
-  └────────────────────────┘                         └────────────────────────┘
+       ┌─────────────────────────────┼─────────────────────────────┬────────────────────────┐
+       │                             │                             │                        │
+┌──────▼──────────────┐       ┌──────▼──────────────┐       ┌──────▼──────────────┐  ┌──────▼──────────────┐
+│  Identity Service   │       │    Order Service    │       │  Inventory Service  │  │  AI Optimizer Serv. │
+│     (Port 8082)     │       │     (Port 8081)     │       │     (Port 8083)     │  │     (Port 8085)     │
+│ JWT·Spring Security │       │  Orders·Fulfilment  │       │  Stock·Warehousing  │  │ Dynamic Allocation  │
+└──────┬──────────────┘       └──────┬──────────────┘       └──────┬──────────────┘  └──────┬──────────────┘
+       │                             │                             │                        │
+       │               ┌─────────────▼─────────────────────────────┘                        │
+       │               │         Apache Kafka (Event Bus)                                   │
+       │               │   Topics: inventory.updated · order.created                        │
+       │               │           order.fulfilled · stock.alert                            │
+       └───────────────┼───────────────────────────────────┐                                │
+                       │                                   │                                │
+            ┌──────────▼──────────┐             ┌──────────▼──────────┐                     │
+            │  PostgreSQL (Auth)  │             │ PostgreSQL (Orders) │                     │
+            │ Redis (Token Cache) │             │ Redis (Stock Cache) │                     │
+            └─────────────────────┘             └─────────────────────┘                     └───────────────────────┘
 
-  ┌─────────────────────────────────────────────────────────────────────────────┐
-  │                     Infrastructure & Observability                           │
-  │    Eureka Server · Zipkin (Tracing) · Prometheus (Metrics) · Grafana (UI)   │
-  └─────────────────────────────────────────────────────────────────────────────┘
+  ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │                                         Infrastructure & Observability                                          │
+  │                     Eureka Server · Zipkin (Tracing) · Prometheus (Metrics) · Grafana (UI)                      │
+  └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 🧩 Services
 
-| Service | Port | Responsibility |
-|---|---|---|
-| **`api-gateway`** | `8080` | Single entry point. Routes requests, handles rate limiting and authentication pre-filtering via Spring Cloud Gateway. |
-| **`auth-service`** | `8081` | User registration, login, and JWT issuance. Tokens are validated by the gateway on every request. Uses Redis to cache and invalidate tokens. |
-| **`inventory-service`** | `8082` | Manages products, stock levels, and warehouse locations. Publishes `inventory.updated` events to Kafka when stock changes. |
-| **`order-service`** | `8083` | Creates and tracks orders through their full lifecycle. Consumes `inventory.updated` events to validate stock before confirming orders. Publishes `order.created` events upon success. |
-| **`eureka-server`** | `8761` | Service registry. All services register here on startup; no service needs a hardcoded URL of another. |
+| Service | Port | Directory | Responsibility |
+|---|---|---|---|
+| **`api-gateway`** | `8080` | [`/api-gateway`](file:///c:/Atlas/atlas-platform/api-gateway) | Single entry point. Routes requests, handles rate limiting, and does JWT pre-filtering via Spring Cloud Gateway. |
+| **`identity-service`** | `8082` | [`/identity-service`](file:///c:/Atlas/atlas-platform/identity-service) | User registration, login, and JWT issuance. Uses Redis to cache and invalidate tokens, and PostgreSQL for credentials. |
+| **`order-service`** | `8081` | [`/order-service`](file:///c:/Atlas/atlas-platform/order-service) | Creates and tracks orders. Consumes `inventory.updated` events to validate stock. Publishes events to Kafka upon order lifecycle changes. |
+| **`inventory-service`** | `8083` | [`/inventory-service`](file:///c:/Atlas/atlas-platform/inventory-service) | Manages products, stock levels, and warehouse locations. Publishes `inventory.updated` events to Kafka when stock changes. |
+| **`ai-optimizer-service`** | `8085` | [`/ai-optimizer-service`](file:///c:/Atlas/atlas-platform/ai-optimizer-service) | Dynamic resource optimization service. Analyzes supply chain patterns to optimize routing and allocation. |
+| **`discovery-server`** | `8761` | [`/discovery-server`](file:///c:/Atlas/atlas-platform/discovery-server) | Service registry (Netflix Eureka). All services register here dynamically on startup. |
 
----
 
 ## 🛠️ Tech Stack
 
@@ -152,11 +152,13 @@ All services should show `Up (healthy)`.
 |---|---|
 | API Gateway | http://localhost:8080 |
 | Eureka Dashboard | http://localhost:8761 |
-| Swagger UI (Inventory) | http://localhost:8082/swagger-ui.html |
-| Swagger UI (Orders) | http://localhost:8083/swagger-ui.html |
+| Swagger UI (Identity) | http://localhost:8082/swagger-ui.html |
+| Swagger UI (Orders) | http://localhost:8081/swagger-ui.html |
+| Swagger UI (Inventory) | http://localhost:8083/swagger-ui.html |
 | Grafana | http://localhost:3000 (admin / admin) |
 | Zipkin | http://localhost:9411 |
 | Prometheus | http://localhost:9090 |
+
 
 ### Shutting down
 
