@@ -1,3 +1,4 @@
+com\atlas\config\WebClientConfig.class
 com\atlas\model\OrderLineItems.class
 com\atlas\repository\OrderRepository.class
 com\atlas\events\InventoryReservedEvent.class

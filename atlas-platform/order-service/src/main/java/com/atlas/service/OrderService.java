@@ -9,10 +9,12 @@ import com.atlas.kafka.OrderEventProducer;
 import com.atlas.model.OrderLineItems;
 import com.atlas.model.OrderModel;
 import com.atlas.repository.OrderRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +29,27 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderEventProducer orderEventProducer;
+    private final WebClient.Builder webClientBuilder;
 
+    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackInventory")
     public OrderResponse placeOrder(OrderRequest request) {
+        // Synchronous check with Inventory Service
+        boolean allInStock = request.getOrderLineItemsDtoList().stream()
+                .allMatch(item -> {
+                    Boolean isInStock = webClientBuilder.build().get()
+                            .uri("http://inventory-service/inventory/" + item.getSkuCode())
+                            .retrieve()
+                            .bodyToMono(Object.class) // Checking if it exists/available
+                            .map(obj -> true)
+                            .defaultIfEmpty(false)
+                            .block();
+                    return isInStock != null && isInStock;
+                });
+
+        if (!allInStock) {
+            throw new RuntimeException("One or more products are out of stock");
+        }
+
         OrderModel order = new OrderModel();
         order.setOrderId(UUID.randomUUID().toString());
         order.setUserId(request.getUserId());
@@ -44,7 +65,6 @@ public class OrderService {
         OrderModel savedOrder = orderRepository.save(order);
         log.info("Order saved to DB: {}", savedOrder.getOrderId());
 
-        // For now, we still send a simplified event for the first item to avoid breaking downstream
         if (!orderLineItems.isEmpty()) {
             OrderLineItems firstItem = orderLineItems.get(0);
             OrderCreatedEvent event = new OrderCreatedEvent(
@@ -58,6 +78,13 @@ public class OrderService {
         }
 
         return mapToResponse(savedOrder);
+    }
+
+    public OrderResponse fallbackInventory(OrderRequest request, RuntimeException runtimeException) {
+        log.error("Circuit Breaker Triggered for Inventory Service: {}", runtimeException.getMessage());
+        OrderResponse response = new OrderResponse();
+        response.setOrderStatus("FAILED: Inventory Service is currently down. Please try again in a few moments.");
+        return response;
     }
 
     @Transactional(readOnly = true)

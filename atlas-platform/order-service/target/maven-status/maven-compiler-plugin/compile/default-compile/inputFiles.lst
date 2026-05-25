@@ -12,4 +12,5 @@ C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\controller\OrderCo
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\dto\OrderResponse.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\kafka\InventoryEventConsumer.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\events\OrderCreatedEvent.java
+C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\config\WebClientConfig.java
 C:\Atlas\atlas-platform\order-service\src\main\java\com\atlas\OrderServiceApplication.java
